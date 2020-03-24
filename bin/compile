@@ -38,6 +38,15 @@ install_dotnet $BUILD_DIR $CACHE_DIR $DOTNET_SDK_VERSION $DOTNET_RUNTIME_VERSION
 
 export PATH="${BUILD_DIR}/.heroku/dotnet:${PATH}"
 
+# ------- Dak specific
+
+git clone https://SaintDako@bitbucket.org/saintlygames/chessers-engine.git ChessersEngine
+cd ChessersEngine
+dotnet build
+cd ..
+
+# -------
+
 cd $BUILD_DIR
 
 if [ -f ${BUILD_DIR}/dotnet-tools.json ] || [ -f ${BUILD_DIR}/.config/dotnet-tools.json ]; then
@@ -64,6 +73,8 @@ if [ -n "$(cat $PROJECT_FILE | grep 'netcoreapp2.0')" ]; then
 	info "More info https://github.com/jincod/dotnetcore-buildpack/issues/44" | indent
 fi
 export NUGET_PACKAGES="${CACHE_DIR}/nuget/cache"
+
+
 
 info "publish ${PROJECT_FILE} for ${BUILD_CONFIGURATION}"
 dotnet publish $PROJECT_FILE --output ${BUILD_DIR}/heroku_output --configuration ${BUILD_CONFIGURATION} --runtime linux-x64
